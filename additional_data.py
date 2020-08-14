@@ -1,7 +1,7 @@
 import re
 
 
-def get_average(filename='results/moscow_results'):
+def get_average(filename='./results/obhiy'):
     data = [
         'Эколгоия',
         'Чистота',
@@ -12,15 +12,19 @@ def get_average(filename='results/moscow_results'):
         'Магазины',
         'Транспорт',
         'Безопасность',
-        'Уровень жизни'
+        'Уровень жизни',
     ]
-    average = [0 for i in range(9)]
+    average = [0 for i in range(10)]
+    var = 0
     amount = 1
-    with open(f'{filename}.txt', 'r', encoding='utf-8') as f:
+    with open(f'{filename}.csv', 'r', encoding='utf-8') as f:
         for i in f:
+            if var == 0:
+                var = 1
+                continue
             amount += 1
-            dictionary = list(map(float, [x.split(':')[1].replace(',', '.') for x in i.split(';')[3:-1]]))
-            for j in range(9):
+            dictionary = list(map(float, [x for x in i.split(',')[3:-1]]))
+            for j in range(10):
                 average[j] += dictionary[j]
         for i in range(len(average)):
             average[i] = round(average[i] / amount, 1)
