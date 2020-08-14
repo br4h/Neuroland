@@ -72,12 +72,12 @@ def set_data_from_design(a):
 				 lifecost, city]
 
 	# Создание ввода
-	input_func = tf.compat.v1.estimator.inputs.pandas_input_fn(x=x_train, y=y_train, batch_size=22, num_epochs=2000,
+	input_func = tf.compat.v1.estimator.inputs.pandas_input_fn(x=x_train, y=y_train, batch_size=21, num_epochs=2000,
 															   shuffle=True)
 
 	path = 'model/X_model/X_model_v1'
 	# Создание модели с использованием регрессии глубоких нейронных сетей
-	model = tf.estimator.DNNRegressor(hidden_units=[13, 800], feature_columns=feat_cols, model_dir=path)
+	model = tf.estimator.DNNRegressor(hidden_units=[13, 13, 13, 13, 13], feature_columns=feat_cols, model_dir=path)
 
 	# Тренировочная модель на 50000 шагов
 	model.train(input_fn=input_func, steps=50000)
