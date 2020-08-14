@@ -9,6 +9,7 @@ def set_data_from_design(a):
 	data = pd.read_csv('results/obhiy.csv')
 	data = data.dropna(axis=0)
 	a = list(map(float, a))
+	print(len(a), a)
 
 	# Входные данные
 	x_data = data.drop(data.columns[[2]], axis=1)  # все столбцы кроме цены и не числового
@@ -19,10 +20,6 @@ def set_data_from_design(a):
 	del x_test, y_test, y_train
 
 	y_test = pd.Series([a[2], a[2]])
-
-	# Масштабирование данных
-	scaler = MinMaxScaler()
-	scaler.fit(x_train)
 
 	ddt = pd.DataFrame({
 		'Area': [a[0], a[0]],
@@ -39,6 +36,11 @@ def set_data_from_design(a):
 		'LifeCost': [a[12], a[12]],
 		'City': [a[13], a[13]]})
 
+	# Масштабирование данных
+	scaler = MinMaxScaler()
+	scaler.fit(x_train)
+
+	# print(ddt)
 	x_test = pd.DataFrame(data=scaler.transform(ddt),
 						  columns=ddt.columns, index=ddt.index)
 
@@ -64,7 +66,7 @@ def set_data_from_design(a):
 	path = 'model/new_model/new_model_v4'
 
 	# Создание модели с использованием регрессии глубоких нейронных сетей
-	model = tf.estimator.DNNRegressor(hidden_units=[13, 750], feature_columns=feat_cols, model_dir=path)
+	model = tf.estimator.DNNRegressor(hidden_units=[13, 13, 13, 13, 13], feature_columns=feat_cols, model_dir=path)
 
 	predict_input_func = tf.compat.v1.estimator.inputs.pandas_input_fn(x=x_test, batch_size=20, num_epochs=1,
 																	   shuffle=False)
@@ -171,6 +173,7 @@ if __name__ == "__main__":
 		"82": "Крым",
 	}
 	l = [
+		[10.0, 4.0, 525000.0, 3.3, 3.1, 2.7, 3.7, 3.4, 3.0, 4.2, 2.9, 3.4, 81.0],
 		[7.0, 10.0, 600000.0, 3.4, 3.2, 3.0, 3.7, 3.5, 3.1, 4.2, 3.2, 3.5, 2.3, 49],
 		[5.0, 3.0, 500000.0, 3.1, 2.9, 2.7, 3.6, 3.3, 3.0, 4.2, 2.4, 3.1, 2.3, 81],
 		[15.0, 98.0, 850000.0, 1.4, 1.6, 1.9, 3.5, 2.8, 2.4, 3.9, 2.4, 2.7, 1.6, 81]
@@ -178,8 +181,8 @@ if __name__ == "__main__":
 	]
 	array = [
 		[set_data_from_design(l[0]), city[str(l[0][-1])], l[0][2]],
-		[set_data_from_design(l[1]), city[str(l[1][-1])], l[1][2]],
-		[set_data_from_design(l[2]), city[str(l[2][-1])], l[2][2]],
+		# [set_data_from_design(l[1]), city[str(l[1][-1])], l[1][2]],
+		# [set_data_from_design(l[2]), city[str(l[2][-1])], l[2][2]],
 		# [set_data_from_design(l[3]), 'Краснодар', l[3][2]],
 	]
 	for i in range(len(array)):
